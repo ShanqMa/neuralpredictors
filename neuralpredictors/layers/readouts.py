@@ -967,6 +967,7 @@ class FullGaussian2d(nn.Module):
         Returns:
             y: neuronal activity
         """
+        
         N, c, w, h = x.size()
         c_in, w_in, h_in = self.in_shape
         if (c_in, w_in, h_in) != (c, w, h):
@@ -994,17 +995,17 @@ class FullGaussian2d(nn.Module):
 
         if shift is not None:
             grid = grid + shift[:, None, None, :]
-
         if not multiplex:
             y = F.grid_sample(x, grid, align_corners=self.align_corners)
             y = (y.squeeze(-1) * feat).sum(1).view(N, outdims)
         else:
+            
             y = torch.einsum("ncwh,uco->nwho", x, feat)
 
         if self.bias is not None:
             y = y + bias
-
-        if multiplex:
+            
+        if multiplex==True:
             if crop_edge_px:
                 y = y[:, crop_edge_px:-crop_edge_px, crop_edge_px:-crop_edge_px, :]
             if collapse:
