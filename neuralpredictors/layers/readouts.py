@@ -1001,7 +1001,6 @@ class FullGaussian2d(nn.Module):
         else:
             
             y = torch.einsum("ncwh,uco->nwho", x, feat)
-        print('............activity is',y)
             
         if self.bias is not None:
             y = y + bias.cuda()
